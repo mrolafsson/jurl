@@ -10,6 +10,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.*;
 import java.net.URL;
+import java.util.Date;
 
 public class JUrl {
 
@@ -17,17 +18,21 @@ public class JUrl {
         try {
             URL url = new URL(args[0]);
 
-            print(url.toExternalForm());
+            print("Requesting: %s", url.toExternalForm());
             print();
 
+            long start = new Date().getTime();
             HttpResponse response = request(url);
+
             HttpEntity entity = response.getEntity();
 
             if (entity != null) {
                 print(response.getStatusLine());
+                print("Response Time: %d ms.", new Date().getTime() - start);
+
                 print(response.getAllHeaders());
 
-                String fileName = getFileName(args, url);
+                String fileName = getFileName(args, url, response);
                 print("Writing to: %s", fileName);
                 write(fileName, response);
 
@@ -47,7 +52,7 @@ public class JUrl {
         return httpclient.execute(httpget);
     }
 
-    public String getFileName(String[] args, URL url) {
+    public String getFileName(String[] args, URL url, HttpResponse response) {
         String fileName;
         if (args.length > 1) {
             fileName = args[1];
@@ -56,7 +61,12 @@ public class JUrl {
         }
 
         if (fileName.length() < 1) {
-            fileName = "RESPONSE";
+            fileName = "response";
+        }
+
+        if (response.getFirstHeader("Content-Type") != null) {
+            String mimeType = response.getFirstHeader("Content-Type").getValue();
+            fileName += "." + mimeType.substring(mimeType.lastIndexOf("/") + 1, mimeType.length());
         }
 
         return fileName;
@@ -74,7 +84,7 @@ public class JUrl {
         printSeparator();
 
         for (Header header : headers) {
-            print("%s: %s", header.getName(), header.getValue());
+            print("%s:  %s", header.getName(), header.getValue());
         }
 
         printSeparator();
