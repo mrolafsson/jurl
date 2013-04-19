@@ -56,7 +56,7 @@ public class JUrl {
         }
 
         if (fileName.length() < 1) {
-            fileName = "file";
+            fileName = "RESPONSE";
         }
 
         return fileName;
