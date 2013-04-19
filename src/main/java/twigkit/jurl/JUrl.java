@@ -132,7 +132,7 @@ public class JUrl {
             new JUrl(args);
         } else {
             print("Usage:");
-            print("java -jar jURL.jar http://twigkit.com/resources/images/screen-twigkit.png [somefilename.png]");
+            print("java -jar jurl.jar http://twigkit.com/resources/images/screen-twigkit.png [somefilename.png]");
         }
 
         print();
