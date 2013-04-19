@@ -1,0 +1,10 @@
+.DS_Store
+target/
+*.iml
+*.iws
+*.ipr
+.idea
+.clover
+*.log
+twigkit-socialdb
+.idea
